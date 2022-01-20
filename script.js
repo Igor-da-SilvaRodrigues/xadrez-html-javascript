@@ -162,6 +162,8 @@ function selecionar(linha, coluna){
         if (!tempeca){
             destino = [linha, coluna]
             moverPeca(selecao, destino)
+            selecao = undefined;
+            destino = undefined;
         }
     }else{
         selecao = undefined;
@@ -170,14 +172,36 @@ function selecionar(linha, coluna){
 }
 
 function moverPeca(selecao, destino){
+    let simbolo;
+    let alvo = document.querySelector(`#l${selecao[0]}`);
 
-    
+    for (i in alvo.children){
+        if (alvo.children[i].classList.contains(selecao[1])){
+            simbolo = alvo.children[i].innerHTML;
+            alvo.children[i].innerHTML = '';
+        }
+    }
 
+    alvo = document.querySelector(`#l${destino[0]}`);
+
+    for (i in alvo.children){
+        if (alvo.children[i].classList.contains(destino[1])){
+            alvo.children[i].innerHTML = simbolo;
+        }
+    }
 }
 
 window.onload = function () {
     let tabuleiro =  getTabuleiro();
     prepararTabuleiro(tabuleiro);
 
+    let tds = document.getElementsByTagName('td')
+    for (i in tds){
+        tds[i].onclick = selecionar;
+    }
+
 }
 
+function foo(){
+    console.log("foo");
+}
