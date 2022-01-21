@@ -134,17 +134,22 @@ function prepararTabuleiro(tabuleiro){
 
 }
 
-function temPeca(linha, coluna){
+function getCasa(linha, coluna){
+    
     let alvo = document.querySelector(`#l${linha}`);
     
     for (i in alvo.children){
         if (alvo.children[i].classList.contains(coluna)){
             alvo = alvo.children[i];
-            break;
+            return alvo;
         }
     }
+    return undefined;
+}
 
-    if (alvo.innerHTML == '' || alvo.innerHTML.length>=2){
+function temPeca(casa){
+    
+    if (casa.innerHTML == '' || casa.innerHTML.length>=2){
         return false;
     }else{
         return true;
@@ -153,55 +158,82 @@ function temPeca(linha, coluna){
 
 function selecionar(linha, coluna){
 
-    let tempeca = temPeca(linha, coluna);
+    let casa = getCasa(linha, coluna);
+
+    let tempeca = temPeca(casa);
     if (selecao == undefined){
         if (tempeca){
-            selecao = [linha, coluna];
+            selecao = casa;
+            selecao.style.boxShadow = "inset 6px 6px 12px rgba(0, 0, 0, 0.7)";
+            console.log(`(${linha},${coluna}) selected`);
         }
     }else if(destino == undefined){
         if (!tempeca){
-            destino = [linha, coluna]
-            moverPeca(selecao, destino)
-            selecao = undefined;
-            destino = undefined;
+            destino = casa;
+            console.log(`(${linha},${coluna}) set as target\nmoving...`);
+            moverPeca(selecao, destino);
+            cleanSelection();
+        }else{
+            cleanSelection();
+            selecionar(linha, coluna);
         }
     }else{
-        selecao = undefined;
-        destino = undefined;
+        cleanSelection();
     }
 }
 
 function moverPeca(selecao, destino){
     let simbolo;
-    let alvo = document.querySelector(`#l${selecao[0]}`);
+    //let valides = validarMovimento(selecao, destino);
+    
+    simbolo = selecao.innerHTML;
+    selecao.innerHTML = '';
+    destino.innerHTML = simbolo;
+}
 
-    for (i in alvo.children){
-        if (alvo.children[i].classList.contains(selecao[1])){
-            simbolo = alvo.children[i].innerHTML;
-            alvo.children[i].innerHTML = '';
-        }
+function validarMovimento(from, to){
+    let pecas = {
+        torre: [TORRE_BRANCA, TORRE_PRETA],
+        cavalo: [CAVALO_BRANCO, CAVALO_PRETO],
+        bispo: [BISPO_BRANCO, BISPO_PRETO],
+        rainha: [RAINHA_BRANCA, RAINHA_PRETA],
+        rei: [REI_BRANCO, REI_PRETO],
+        peao: [PEAO_BRANCO, PEAO_PRETO]
     }
 
-    alvo = document.querySelector(`#l${destino[0]}`);
 
-    for (i in alvo.children){
-        if (alvo.children[i].classList.contains(destino[1])){
-            alvo.children[i].innerHTML = simbolo;
-        }
-    }
+    
 }
 
 window.onload = function () {
     let tabuleiro =  getTabuleiro();
     prepararTabuleiro(tabuleiro);
 
-    let tds = document.getElementsByTagName('td')
+    let tds = document.getElementsByTagName('td');
     for (i in tds){
-        tds[i].onclick = selecionar;
+        
+        if (i.length<=2){
+            
+            let td_linha = tds[i].parentElement.id[1];
+            let td_coluna = tds[i].classList[tds[i].classList.length-1];
+            
+
+            tds[i].addEventListener('click', function(){
+                selecionar(td_linha, td_coluna);  
+            });
+            console.log(`added event listener to (${td_linha},${td_coluna})`); 
+            //selecionar(tds[i].parentElement.id[1], tds[i].classList[tds[i].classList.length-1]);
+        }else{
+            console.log(`failed to add event listener to \"${i}\"`);
+        }
     }
 
 }
 
-function foo(){
-    console.log("foo");
+function cleanSelection(){
+    selecao.style.boxShadow = "";
+    console.log('cleaning selection');
+    selecao = undefined;
+    destino = undefined;
+    
 }
