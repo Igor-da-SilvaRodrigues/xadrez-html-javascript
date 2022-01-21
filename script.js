@@ -5,7 +5,7 @@ function criarUnidade(peca, cor){
     let valmov;        
     switch(peca){
         case "torre":
-            if (cor == 'branco'){
+            if (cor == BRANCO){
                 icone = 'r';
             }else{
                 icone = 't';
@@ -15,7 +15,7 @@ function criarUnidade(peca, cor){
             }
             break;
         case "cavalo":
-            if (cor == 'branco'){
+            if (cor == BRANCO){
                 icone = 'h';
             }else{
                 icone = 'j';
@@ -25,7 +25,7 @@ function criarUnidade(peca, cor){
             }
             break;
         case "bispo":
-            if (cor == 'branco'){
+            if (cor == BRANCO){
                 icone = 'b';
             }else{
                 icone = 'n';
@@ -35,7 +35,7 @@ function criarUnidade(peca, cor){
             }
             break;
         case "rainha":
-            if (cor == 'branco'){
+            if (cor == BRANCO){
                 icone = 'q';
             }else{
                 icone = 'w';
@@ -45,7 +45,7 @@ function criarUnidade(peca, cor){
             }
             break;
         case "rei":
-            if (cor == 'branco'){
+            if (cor == BRANCO){
                 icone = 'k';
             }else{
                 icone = 'l';
@@ -55,7 +55,7 @@ function criarUnidade(peca, cor){
             }
             break;
         case "peao":
-            if (cor == 'branco'){
+            if (cor == BRANCO){
                 icone = 'p';
             }else{
                 icone = 'o';
@@ -76,21 +76,24 @@ function criarUnidade(peca, cor){
 };
 
 //#region DECLARAÇÕES
-let TORRE_PRETA = criarUnidade("torre", "preto");
-let CAVALO_PRETO = criarUnidade("cavalo", "preto");
-let BISPO_PRETO = criarUnidade("bispo", "preto");
-let RAINHA_PRETA = criarUnidade("rainha", "preto");
-let REI_PRETO = criarUnidade("rei", "preto");
-let PEAO_PRETO = criarUnidade("peao", "preto");
+let BRANCO = "branco";
+let PRETO = "preto";
+let TORRE_PRETA = criarUnidade("torre", PRETO);
+let CAVALO_PRETO = criarUnidade("cavalo", PRETO);
+let BISPO_PRETO = criarUnidade("bispo", PRETO);
+let RAINHA_PRETA = criarUnidade("rainha", PRETO);
+let REI_PRETO = criarUnidade("rei", PRETO);
+let PEAO_PRETO = criarUnidade("peao", PRETO);
 
-let TORRE_BRANCA = criarUnidade("torre", "branco");
-let CAVALO_BRANCO = criarUnidade("cavalo", "branco");
-let BISPO_BRANCO = criarUnidade("bispo", "branco");
-let RAINHA_BRANCA = criarUnidade("rainha", "branco");
-let REI_BRANCO = criarUnidade("rei", "branco");
-let PEAO_BRANCO = criarUnidade("peao", "branco");
+let TORRE_BRANCA = criarUnidade("torre", BRANCO);
+let CAVALO_BRANCO = criarUnidade("cavalo", BRANCO);
+let BISPO_BRANCO = criarUnidade("bispo", BRANCO);
+let RAINHA_BRANCA = criarUnidade("rainha", BRANCO);
+let REI_BRANCO = criarUnidade("rei", BRANCO);
+let PEAO_BRANCO = criarUnidade("peao", BRANCO);
 let selecao = undefined;
 let destino = undefined;
+let jogador = BRANCO;
 //#endregion
 
 function getTabuleiro(){ // retorna um conjunto de 8 linhas
@@ -147,6 +150,17 @@ function getCasa(linha, coluna){
     return undefined;
 }
 
+function getPecaDaCasa(casa){
+    let pecas = [TORRE_BRANCA, CAVALO_BRANCO, BISPO_BRANCO, RAINHA_BRANCA, REI_BRANCO, PEAO_BRANCO, TORRE_PRETA, CAVALO_PRETO, BISPO_PRETO, RAINHA_PRETA, REI_PRETO, PEAO_PRETO];
+
+    for (i in pecas){
+        if (pecas[i].simbolo == casa.innerHTML){
+            return pecas[i];
+        }
+    }
+    return undefined;
+}
+
 function temPeca(casa){
     
     if (casa.innerHTML == '' || casa.innerHTML.length>=2){
@@ -159,12 +173,15 @@ function temPeca(casa){
 function selecionar(linha, coluna){
 
     let casa = getCasa(linha, coluna);
+    let peca = getPecaDaCasa(casa);
+
+    
 
     let tempeca = temPeca(casa);
     if (selecao == undefined){
-        if (tempeca){
+        if (tempeca && peca.equipe == jogador){
             selecao = casa;
-            selecao.style.boxShadow = "inset 6px 6px 12px rgba(0, 0, 0, 0.7)";
+            selecao.style.boxShadow = "inset 3px 3px 6px rgba(0, 0, 0, 0.7)";
             console.log(`(${linha},${coluna}) selected`);
         }
     }else if(destino == undefined){
@@ -172,6 +189,7 @@ function selecionar(linha, coluna){
             destino = casa;
             console.log(`(${linha},${coluna}) set as target\nmoving...`);
             moverPeca(selecao, destino);
+            passarVez();
             cleanSelection();
         }else{
             cleanSelection();
@@ -235,5 +253,27 @@ function cleanSelection(){
     console.log('cleaning selection');
     selecao = undefined;
     destino = undefined;
+    
+}
+
+function passarVez(){
+    let footer = document.querySelector('footer');
+    let painel = document.querySelector('jogador');
+    if (jogador == BRANCO){
+        jogador = PRETO;
+        footer.style.backgroundColor = "black";
+        footer.style.color = "white";
+        footer.style.border = "2px solid white"
+        painel.innerHTML = PRETO.toUpperCase();
+
+    }else{
+        jogador = BRANCO;
+        footer.style.backgroundColor = "white";
+        footer.style.color = "black";
+        footer.style.border = "2px solid black"
+        painel.innerHTML = BRANCO.toUpperCase();
+
+    }
+
     
 }
