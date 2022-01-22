@@ -10,8 +10,14 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 't';
             }
-            valmov = function(tabuleiroAntigo, TabuleiroNovo){
-
+            valmov = function(selecao, destino){
+                
+                let col_selecao =selecao.classList[selecao.classList.length-1];
+                let col_destino = destino.classList[destino.classList.length-1];
+                if(col_destino == col_selecao){
+                    return true;
+                }
+                return false;
             }
             break;
         case "cavalo":
@@ -20,8 +26,44 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'j';
             }
-            valmov = function(tabuleiroAntigo, TabuleiroNovo){
+            valmov = function(selecao, destino){
+                //+-2 linha e +-1 coluna OU +-1 linha e +-2 coluna
+                let colunas = "abcdefgh";
+                let linhas = [8,7,6,5,4,3,2,1];
+                let destinosValidos = [];
                 
+                let linha_selecao = selecao.parentElement.id[1]; //linha
+                let coluna_selecao = selecao.classList[selecao.classList.lenght-1]; // coluna
+                
+                //destino.parentElement.id[1]; //linha
+                //destino.classList[destino.classList.lenght-1]; // coluna
+                
+                for (i in linhas){
+                    if (i != undefined && linhas[i] != undefined){
+                        //+-2 linhas E +-1 colunas
+                        if (linhas[i] == linha_selecao + 2 || linhas[i] == linha_selecao - 2){
+                            
+                            for (j in colunas){
+
+                                if (j != undefined && colunas[j] != undefined){
+
+                                    if (colunas[j] == colunas[colunas.indexOf(col_selecao) + 1] || colunas[j] == colunas[colunas.indexOf(col_selecao) - 1] ){
+                                        destinosValidos.push(getCasa())
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                        //+-1 linhas E +-2 colunas
+                        if (linhas[i] == linha_selecao + 1 || linhas[i] == linha_selecao - 1){
+
+                        }
+
+                    }
+                }
+
             }
             break;
         case "bispo":
@@ -30,7 +72,7 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'n';
             }
-            valmov = function(tabuleiroAntigo, TabuleiroNovo){
+            valmov = function(movimento){
                 
             }
             break;
@@ -40,7 +82,7 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'w';
             }
-            valmov = function(tabuleiroAntigo, TabuleiroNovo){
+            valmov = function(movimento){
                 
             }
             break;
@@ -50,7 +92,7 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'l';
             }
-            valmov = function(tabuleiroAntigo, TabuleiroNovo){
+            valmov = function(movimento){
                 
             }
             break;
@@ -60,7 +102,7 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'o';
             }
-            valmov = function(tabuleiroAntigo, TabuleiroNovo){
+            valmov = function(movimento){
                 
             }
             break;
@@ -185,12 +227,16 @@ function selecionar(linha, coluna){
             console.log(`(${linha},${coluna}) selected`);
         }
     }else if(destino == undefined){
-        if (!tempeca){
+        if (!tempeca || peca.equipe != jogador){
             destino = casa;
             console.log(`(${linha},${coluna}) set as target\nmoving...`);
-            moverPeca(selecao, destino);
-            passarVez();
-            cleanSelection();
+            if(moverPeca(selecao, destino)){
+                passarVez();
+                cleanSelection();
+            }else{
+                destino = undefined;
+            }
+            
         }else{
             cleanSelection();
             selecionar(linha, coluna);
@@ -202,25 +248,22 @@ function selecionar(linha, coluna){
 
 function moverPeca(selecao, destino){
     let simbolo;
-    //let valides = validarMovimento(selecao, destino);
-    
-    simbolo = selecao.innerHTML;
-    selecao.innerHTML = '';
-    destino.innerHTML = simbolo;
-}
-
-function validarMovimento(from, to){
-    let pecas = {
-        torre: [TORRE_BRANCA, TORRE_PRETA],
-        cavalo: [CAVALO_BRANCO, CAVALO_PRETO],
-        bispo: [BISPO_BRANCO, BISPO_PRETO],
-        rainha: [RAINHA_BRANCA, RAINHA_PRETA],
-        rei: [REI_BRANCO, REI_PRETO],
-        peao: [PEAO_BRANCO, PEAO_PRETO]
+    let valides = validarMovimento(selecao, destino);
+    if (valides){
+        simbolo = selecao.innerHTML;
+        selecao.innerHTML = '';
+        destino.innerHTML = simbolo;
+        
+    }else{
+        console.log('movimento invalido');
     }
 
+    return valides;
+}
 
-    
+function validarMovimento(selecao, destino){
+    let peca = getPecaDaCasa(selecao);
+    return peca.validarMovimento(selecao, destino);    
 }
 
 window.onload = function () {
