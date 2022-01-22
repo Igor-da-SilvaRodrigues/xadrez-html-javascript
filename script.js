@@ -29,39 +29,67 @@ function criarUnidade(peca, cor){
             valmov = function(selecao, destino){
                 //+-2 linha e +-1 coluna OU +-1 linha e +-2 coluna
                 let colunas = "abcdefgh";
-                let linhas = [8,7,6,5,4,3,2,1];
                 let destinosValidos = [];
+                //let tabuleiro = getTabuleiro();
+
+                let linha_selecao = Number(selecao.parentElement.id[1]); //linha
                 
-                let linha_selecao = selecao.parentElement.id[1]; //linha
-                let coluna_selecao = selecao.classList[selecao.classList.lenght-1]; // coluna
+                let coluna_selecao = selecao.classList[selecao.classList.length-1]; // coluna
                 
-                //destino.parentElement.id[1]; //linha
-                //destino.classList[destino.classList.lenght-1]; // coluna
                 
-                for (i in linhas){
-                    if (i != undefined && linhas[i] != undefined){
-                        //+-2 linhas E +-1 colunas
-                        if (linhas[i] == linha_selecao + 2 || linhas[i] == linha_selecao - 2){
-                            
-                            for (j in colunas){
+                let linha_destino = destino.parentElement.id[1]; //linha
+                let coluna_destino = destino.classList[destino.classList.length-1]; // coluna
+                
+                console.log(`a linha selecionada é ${linha_selecao}`);
+                console.log(`linhas validas incluem ${linha_selecao+2} e ${linha_selecao-2}`)
+                console.log(`a coluna selecionada é ${coluna_selecao}`);
+                console.log(`colunas validas incluem ${colunas[colunas.indexOf(coluna_selecao)+1]} e ${colunas[colunas.indexOf(coluna_selecao)-1]}`);
 
-                                if (j != undefined && colunas[j] != undefined){
-
-                                    if (colunas[j] == colunas[colunas.indexOf(col_selecao) + 1] || colunas[j] == colunas[colunas.indexOf(col_selecao) - 1] ){
-                                        destinosValidos.push(getCasa())
-                                    }
-
-                                }
-
-                            }
-
-                        }
-                        //+-1 linhas E +-2 colunas
-                        if (linhas[i] == linha_selecao + 1 || linhas[i] == linha_selecao - 1){
-
-                        }
-
+                if (linha_destino == linha_selecao + 2 || linha_destino == linha_selecao - 2){
+                    if (coluna_destino == colunas[colunas.indexOf(coluna_selecao)+1] || coluna_destino == colunas[colunas.indexOf(coluna_selecao)-1]){
+                        return true;
                     }
+                }
+
+                if (linha_destino == linha_selecao + 1 || linha_destino == linha_selecao - 1){
+                    if (coluna_destino == colunas[colunas.indexOf(coluna_selecao)+2] || coluna_destino == colunas[colunas.indexOf(coluna_selecao)-2]){
+                        return true;
+                    }
+                }
+
+                /*
+                for (i in tabuleiro){
+                    //+-2 linha e +-1 coluna
+                    if (i == linha_selecao+2 || i == linha_selecao-2){
+                        let coluna_selecaoPP = colunas[colunas.indexOf(coluna_selecao)+1];
+                        let coluna_selecaoMM = colunas[colunas.indexOf(coluna_selecao)-1];
+                        if (coluna_selecaoPP){
+                            destinosValidos.push(getCasa(i, coluna_selecaoPP));
+                        }
+                        if (coluna_selecaoMM){
+                            destinosValidos.push(getCasa(i, coluna_selecaoMM));
+                        }
+                        
+                    }
+                    //+-1 linha e +-2 coluna
+                    if (i == linha_selecao+1 || i == linha_selecao-1){
+                        let coluna_selecaoPP = colunas[colunas.indexOf(coluna_selecao)+2];
+                        let coluna_selecaoMM = colunas[colunas.indexOf(coluna_selecao)-2];
+                        if (coluna_selecaoPP){
+                            destinosValidos.push(getCasa(i, coluna_selecaoPP));
+                        }
+                        if (coluna_selecaoMM){
+                            destinosValidos.push(getCasa(i, coluna_selecaoMM));
+                        }
+                        
+                    }
+                    
+                }
+                */
+                if (destinosValidos.indexOf(destino) > -1){
+                    return true;
+                }else{
+                    return false;
                 }
 
             }
