@@ -11,10 +11,56 @@ function criarUnidade(peca, cor){
                 icone = 't';
             }
             valmov = function(selecao, destino){
+                let linha_selecao = selecao.parentElement.id[1];
+                let linha_destino = destino.parentElement.id[1];
                 
                 let col_selecao =selecao.classList[selecao.classList.length-1];
                 let col_destino = destino.classList[destino.classList.length-1];
-                if(col_destino == col_selecao){
+
+                if(col_destino == col_selecao){//movendo verticalmente
+                    
+                    if (linha_destino < linha_selecao){ // movendo para cima
+                        let a = linha_selecao-1;
+
+                        while(a > linha_destino){
+                            
+                            if (temPeca(getCasa(a, col_selecao))){return false;}
+
+                            a = a - 1;
+                        }
+                    }else{ //movento para baixo
+                        let a = linha_selecao+1;
+
+                        while(a < linha_destino){
+                            
+                            if (temPeca(getCasa(a, col_selecao))){return false;}
+
+                            a = a + 1;
+                        }
+                    }
+
+                    return true;
+                }
+
+                if( linha_selecao == linha_destino ){//movendo lateralmente
+                    let colunas = "abcdefgh";
+                    let indice_selecao = colunas.indexOf(col_selecao);
+                    let indice_destino = colunas.indexOf(col_destino);
+
+                    if (indice_destino < indice_selecao){//movendo para a esquerda 
+                        let a = indice_selecao-1;
+                        while(a > indice_destino){
+                            if (temPeca(getCasa(linha_selecao, colunas[a]))){return false;}
+                            a = a - 1;
+                        }
+                    }else{//movendo para a direita
+                        let a = indice_selecao+1;
+                        while(a < indice_destino){
+                            if (temPeca(getCasa(linha_selecao, colunas[a]))){return false;}
+                            a = a + 1;
+                        }
+                    }
+                    
                     return true;
                 }
                 return false;
@@ -29,22 +75,13 @@ function criarUnidade(peca, cor){
             valmov = function(selecao, destino){
                 //+-2 linha e +-1 coluna OU +-1 linha e +-2 coluna
                 let colunas = "abcdefgh";
-                let destinosValidos = [];
-                //let tabuleiro = getTabuleiro();
-
+                                
                 let linha_selecao = Number(selecao.parentElement.id[1]); //linha
-                
                 let coluna_selecao = selecao.classList[selecao.classList.length-1]; // coluna
-                
                 
                 let linha_destino = destino.parentElement.id[1]; //linha
                 let coluna_destino = destino.classList[destino.classList.length-1]; // coluna
                 
-                console.log(`a linha selecionada é ${linha_selecao}`);
-                console.log(`linhas validas incluem ${linha_selecao+2} e ${linha_selecao-2}`)
-                console.log(`a coluna selecionada é ${coluna_selecao}`);
-                console.log(`colunas validas incluem ${colunas[colunas.indexOf(coluna_selecao)+1]} e ${colunas[colunas.indexOf(coluna_selecao)-1]}`);
-
                 if (linha_destino == linha_selecao + 2 || linha_destino == linha_selecao - 2){
                     if (coluna_destino == colunas[colunas.indexOf(coluna_selecao)+1] || coluna_destino == colunas[colunas.indexOf(coluna_selecao)-1]){
                         return true;
@@ -57,40 +94,7 @@ function criarUnidade(peca, cor){
                     }
                 }
 
-                /*
-                for (i in tabuleiro){
-                    //+-2 linha e +-1 coluna
-                    if (i == linha_selecao+2 || i == linha_selecao-2){
-                        let coluna_selecaoPP = colunas[colunas.indexOf(coluna_selecao)+1];
-                        let coluna_selecaoMM = colunas[colunas.indexOf(coluna_selecao)-1];
-                        if (coluna_selecaoPP){
-                            destinosValidos.push(getCasa(i, coluna_selecaoPP));
-                        }
-                        if (coluna_selecaoMM){
-                            destinosValidos.push(getCasa(i, coluna_selecaoMM));
-                        }
-                        
-                    }
-                    //+-1 linha e +-2 coluna
-                    if (i == linha_selecao+1 || i == linha_selecao-1){
-                        let coluna_selecaoPP = colunas[colunas.indexOf(coluna_selecao)+2];
-                        let coluna_selecaoMM = colunas[colunas.indexOf(coluna_selecao)-2];
-                        if (coluna_selecaoPP){
-                            destinosValidos.push(getCasa(i, coluna_selecaoPP));
-                        }
-                        if (coluna_selecaoMM){
-                            destinosValidos.push(getCasa(i, coluna_selecaoMM));
-                        }
-                        
-                    }
-                    
-                }
-                */
-                if (destinosValidos.indexOf(destino) > -1){
-                    return true;
-                }else{
-                    return false;
-                }
+                return false;
 
             }
             break;
@@ -130,8 +134,62 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'o';
             }
-            valmov = function(movimento){
+            valmov = function(selecao, destino){
                 
+                let linha_selecao = selecao.parentElement.id[1];
+                let linha_destino = destino.parentElement.id[1];
+                
+                let col_selecao =selecao.classList[selecao.classList.length-1];
+                let col_destino = destino.classList[destino.classList.length-1];
+
+                if(col_destino == col_selecao){//movendo verticalmente
+                    
+                    if (linha_destino < linha_selecao){ // movendo para cima
+                        let a = linha_selecao-1;
+
+                        while(a > linha_destino){
+                            
+                            if (temPeca(getCasa(a, col_selecao))){return false;}
+
+                            a = a - 1;
+                        }
+                    }else{ //movento para baixo
+                        let a = linha_selecao+1;
+
+                        while(a < linha_destino){
+                            
+                            if (temPeca(getCasa(a, col_selecao))){return false;}
+
+                            a = a + 1;
+                        }
+                    }
+
+                    return true;
+                }
+
+                if( linha_selecao == linha_destino ){//movendo lateralmente
+                    let colunas = "abcdefgh";
+                    let indice_selecao = colunas.indexOf(col_selecao);
+                    let indice_destino = colunas.indexOf(col_destino);
+
+                    if (indice_destino < indice_selecao){//movendo para a esquerda 
+                        let a = indice_selecao-1;
+                        while(a > indice_destino){
+                            if (temPeca(getCasa(linha_selecao, colunas[a]))){return false;}
+                            a = a - 1;
+                        }
+                    }else{//movendo para a direita
+                        let a = indice_selecao+1;
+                        while(a < indice_destino){
+                            if (temPeca(getCasa(linha_selecao, colunas[a]))){return false;}
+                            a = a + 1;
+                        }
+                    }
+                    
+                    return true;
+                }
+                return false;
+
             }
             break;
     }
