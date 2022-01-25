@@ -11,8 +11,9 @@ function criarUnidade(peca, cor){
                 icone = 't';
             }
             valmov = function(selecao, destino){
-                let linha_selecao = selecao.parentElement.id[1];
-                let linha_destino = destino.parentElement.id[1];
+                
+                let linha_selecao = Number(selecao.parentElement.id[1]);
+                let linha_destino = Number(destino.parentElement.id[1]);
                 
                 let col_selecao =selecao.classList[selecao.classList.length-1];
                 let col_destino = destino.classList[destino.classList.length-1];
@@ -79,7 +80,7 @@ function criarUnidade(peca, cor){
                 let linha_selecao = Number(selecao.parentElement.id[1]); //linha
                 let coluna_selecao = selecao.classList[selecao.classList.length-1]; // coluna
                 
-                let linha_destino = destino.parentElement.id[1]; //linha
+                let linha_destino = Number(destino.parentElement.id[1]); //linha
                 let coluna_destino = destino.classList[destino.classList.length-1]; // coluna
                 
                 if (linha_destino == linha_selecao + 2 || linha_destino == linha_selecao - 2){
@@ -136,8 +137,8 @@ function criarUnidade(peca, cor){
             }
             valmov = function(selecao, destino){
                 
-                let linha_selecao = selecao.parentElement.id[1];
-                let linha_destino = destino.parentElement.id[1];
+                let linha_selecao = Number(selecao.parentElement.id[1]);
+                let linha_destino = Number(destino.parentElement.id[1]);
                 
                 let col_selecao =selecao.classList[selecao.classList.length-1];
                 let col_destino = destino.classList[destino.classList.length-1];
@@ -266,7 +267,7 @@ function prepararTabuleiro(tabuleiro){
 }
 
 function getCasa(linha, coluna){
-    
+    console.log(`query:: #l${linha}`);
     let alvo = document.querySelector(`#l${linha}`);
     
     for (i in alvo.children){
