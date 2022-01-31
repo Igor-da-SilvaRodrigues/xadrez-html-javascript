@@ -15,7 +15,7 @@ function criarUnidade(peca, cor){
                 let linha_selecao = Number(selecao.parentElement.id[1]);
                 let linha_destino = Number(destino.parentElement.id[1]);
                 
-                let col_selecao =selecao.classList[selecao.classList.length-1];
+                let col_selecao = selecao.classList[selecao.classList.length-1];
                 let col_destino = destino.classList[destino.classList.length-1];
 
                 if(col_destino == col_selecao){//movendo verticalmente
@@ -105,8 +105,70 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'n';
             }
-            valmov = function(movimento){
+            valmov = function(selecao, destino){
                 
+                let linha_selecao = Number(selecao.parentElement.id[1]);
+                let linha_destino = Number(destino.parentElement.id[1]);
+
+                let col_selecao = selecao.classList[selecao.classList.length-1];
+                let col_destino = destino.classList[destino.classList.length-1];
+
+                let colunas = "abcdefgh";
+                let indice_col_selecao = colunas.indexOf(col_selecao);
+                let indice_col_destino = colunas.indexOf(col_destino);
+
+                let diferenca_linha_selecao_destino = linha_selecao - linha_destino;
+                let diferenca_coluna_selecao_destino = indice_col_selecao - indice_col_destino;
+                
+                //o bispo so pode se mover em uma diagonal, e como no xadrez a unica diagonal é sempre 45°, a distância movida nas linhas é sempre igual a das colunas.
+                // a diferenca esta sendo elevada ao quadrado para descosiderar numeros negativos.
+                if (diferenca_linha_selecao_destino * diferenca_linha_selecao_destino == diferenca_coluna_selecao_destino * diferenca_coluna_selecao_destino){
+
+                    
+                    if (linha_destino > linha_selecao){ //movendo para baixo
+                        
+                        if (indice_col_destino > indice_col_selecao){ //movendo inferior direito
+                            let a = [linha_selecao + 1, indice_col_selecao + 1];
+                            
+                            while (linha_destino > a[0]){
+                                if (temPeca(getCasa(a[0], colunas[a[1]]))){return false;}
+
+                                a = [a[0] + 1, a[1] + 1];
+                            }
+
+
+                        } else { //movendo inferior esquerdo
+                            let a = [linha_selecao + 1, indice_col_selecao - 1];
+                            
+                            while (linha_destino > a[0]){
+                                if (temPeca(getCasa(a[0], colunas[a[1]]))){return false;}
+
+                                a = [a[0] + 1, a[1] - 1];
+                            }
+                        }
+                    } else { //movendo para cima
+
+                        if (indice_col_destino > indice_col_selecao){ //movendo superior direito
+                            let a = [linha_selecao - 1, indice_col_selecao + 1];
+
+                            while (linha_destino < a[0]){
+                                if (temPeca(getCasa(a[0], colunas[a[1]]))){return false;}
+                                a = [a[0] - 1, a[1] + 1];
+                            }
+                        } else { //movendo superior esquerdo
+                            let a = [linha_selecao - 1, indice_col_selecao - 1];
+
+                            while (linha_destino < a[0]){
+                                if (temPeca(getCasa(a[0], colunas[a[1]]))){return false;}
+                                a = [a[0] - 1, a[1] - 1];
+                            }
+                        }
+                    }
+
+                    return true;
+                }
+                
+                return false;
             }
             break;
         case "rainha":
@@ -267,7 +329,7 @@ function prepararTabuleiro(tabuleiro){
 }
 
 function getCasa(linha, coluna){
-    console.log(`query:: #l${linha}`);
+
     let alvo = document.querySelector(`#l${linha}`);
     
     for (i in alvo.children){
