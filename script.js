@@ -214,61 +214,47 @@ function criarUnidade(peca, cor){
                 icone = 'o';
             }
             valmov = function(selecao, destino){
-                
                 let linha_selecao = Number(selecao.parentElement.id[1]);
                 let linha_destino = Number(destino.parentElement.id[1]);
-                
-                let col_selecao =selecao.classList[selecao.classList.length-1];
+                let col_selecao = selecao.classList[selecao.classList.length-1];
                 let col_destino = destino.classList[destino.classList.length-1];
 
-                if(col_destino == col_selecao){//movendo verticalmente
+
+                let max_delta_linha = 1; // define o movimento vertical maximo do peão
+
+                if (linha_selecao == 1 || linha_selecao == 6 && !selecao.classList.contains('usado')  ){
+                    max_delta_linha = 2;
                     
-                    if (linha_destino < linha_selecao){ // movendo para cima
-                        let a = linha_selecao-1;
-
-                        while(a > linha_destino){
-                            
-                            if (temPeca(getCasa(a, col_selecao))){return false;}
-
-                            a = a - 1;
-                        }
-                    }else{ //movento para baixo
-                        let a = linha_selecao+1;
-
-                        while(a < linha_destino){
-                            
-                            if (temPeca(getCasa(a, col_selecao))){return false;}
-
-                            a = a + 1;
-                        }
-                    }
-
-                    return true;
+                    selecao.classList.replace(col_selecao, 'usado');
+                    selecao.classList.add(col_selecao);
                 }
 
-                if( linha_selecao == linha_destino ){//movendo lateralmente
-                    let colunas = "abcdefgh";
-                    let indice_selecao = colunas.indexOf(col_selecao);
-                    let indice_destino = colunas.indexOf(col_destino);
 
-                    if (indice_destino < indice_selecao){//movendo para a esquerda 
-                        let a = indice_selecao-1;
-                        while(a > indice_destino){
-                            if (temPeca(getCasa(linha_selecao, colunas[a]))){return false;}
-                            a = a - 1;
-                        }
-                    }else{//movendo para a direita
-                        let a = indice_selecao+1;
-                        while(a < indice_destino){
-                            if (temPeca(getCasa(linha_selecao, colunas[a]))){return false;}
-                            a = a + 1;
+
+                let colunas = "abcdefgh";
+                let indice_col_selecao = colunas.indexOf(col_selecao); 
+                let indice_col_destino = colunas.indexOf(col_destino);
+
+                let delta_linha = linha_selecao - linha_destino;// <0 = movendo para baixo, >0 = para cima
+                let delta_coluna = indice_col_selecao - indice_col_destino;//<0 movendo para direita, >0 = para esquerda
+
+                if ( col_selecao == col_destino ){//movendo verticalmente
+                    if (Math.abs(delta_linha) <= max_delta_linha){ //o movimento vertical deve <=maximo
+                        if (delta_linha < 0 && cor == PRETO || delta_linha > 0 && cor == BRANCO){
+                            if (!temPeca(destino)){
+                                return true;
+                            }
                         }
                     }
-                    
-                    return true;
+                } else if (temPeca(destino)){ // movimento diagonal somente se tiver oposição no destino
+                    if (Math.abs(delta_coluna) <= 1 && Math.abs(delta_linha) == 1){//movimento diagonal não pode se mover lateralmente mais que uma casa e é obrigado a se mover uma casa para frente.
+                        if (delta_linha < 0 && cor == PRETO || delta_linha > 0 && cor == BRANCO){
+                            return true;
+                        }
+                    }
                 }
+
                 return false;
-
             }
             break;
     }
