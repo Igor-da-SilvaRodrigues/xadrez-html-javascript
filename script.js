@@ -453,16 +453,16 @@ function passarVez(){
     let painel = document.querySelector('jogador');
     if (jogador == BRANCO){
         jogador = PRETO;
-        footer.style.backgroundColor = "black";
-        footer.style.color = "white";
-        footer.style.border = "2px solid white"
+        footer.style.backgroundColor = "rgb(30, 30, 30)";
+        footer.style.color = "beige";
+        footer.style.border = "2px solid beige"
         painel.innerHTML = PRETO.toUpperCase();
 
     }else{
         jogador = BRANCO;
-        footer.style.backgroundColor = "white";
-        footer.style.color = "black";
-        footer.style.border = "2px solid black"
+        footer.style.backgroundColor = "beige";
+        footer.style.color = "rgb(30, 30, 30)";
+        footer.style.border = "2px solid rgb(30, 30, 30)"
         painel.innerHTML = BRANCO.toUpperCase();
 
     }
