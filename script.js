@@ -177,8 +177,8 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'w';
             }
-            valmov = function(movimento){
-                
+            valmov = function(selecao, destino){//kk
+                return TORRE_BRANCA.validarMovimento(selecao, destino) || BISPO_BRANCO.validarMovimento(selecao, destino);
             }
             break;
         case "rei":
