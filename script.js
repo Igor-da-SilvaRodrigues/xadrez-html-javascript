@@ -187,8 +187,24 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'l';
             }
-            valmov = function(movimento){
-                
+            valmov = function(selecao, destino){
+                let linha_selecao = Number(selecao.parentElement.id[1]);
+                let linha_destino = Number(destino.parentElement.id[1]);
+
+                let col_selecao = selecao.classList[selecao.classList.length-1];
+                let col_destino = destino.classList[destino.classList.length-1];
+
+                let colunas = "abcdefgh";
+                let indice_col_selecao = colunas.indexOf(col_selecao);
+                let indice_col_destino = colunas.indexOf(col_destino);
+
+                let delta_linha = linha_selecao - linha_destino;
+                let delta_coluna = indice_col_selecao - indice_col_destino;
+
+                delta_linha = delta_linha * delta_linha;
+                delta_coluna = delta_coluna * delta_coluna;
+
+                return (delta_linha <= 1 && delta_coluna  <= 1);  
             }
             break;
         case "peao":
