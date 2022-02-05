@@ -1,3 +1,9 @@
+:root{
+    --white-color: beige;
+    --black-color: rgb(30,30,30);
+    --black-background: rgb(186, 140, 99);
+
+}
 @font-face {
     font-family: CHEQ;
     src: url("./fontes/CHEQ_TT.TTF");
@@ -39,13 +45,13 @@ td{
     border: 1px solid black;
     width: 50px;
     height: 50px;
-    background-color: beige;
+    background-color: var(--white-color);
     padding: 12px;
 }
 
 
 td.preta{
-    background-color: rgb(186, 140, 99);
+    background-color: var(--black-background);
 }
 
 td:hover{
@@ -56,9 +62,9 @@ td:hover{
 footer{
     padding: 6px;
     font-family: Arial, Helvetica, sans-serif;
-    background-color: beige;
-    color: rgb(30, 30, 30);
-    border: 2px solid rgb(30, 30, 30);
+    background-color: var(--white-color);
+    color: var(--black-color);
+    border: 2px solid var(--black-color);
     max-height: 50px;
     text-align: center;
     width: 43%;
