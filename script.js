@@ -414,7 +414,36 @@ function moverPeca(selecao, destino){
 
 function validarMovimento(selecao, destino){
     let peca = getPecaDaCasa(selecao);
-    return peca.validarMovimento(selecao, destino);    
+    let retorno =  peca.validarMovimento(selecao, destino);
+    if ((peca == PEAO_BRANCO && destino.parentElement.id[1] == '0' || peca == PEAO_PRETO && destino.parentElement.id[1] == '7') && retorno){
+        selecao.innerHTML = promoverPeao(selecao);
+    }
+    return retorno;    
+}
+
+function promoverPeao(selecao){
+    let userInput
+    let pecasvalidas = ['rainha', 'torre', 'bispo', 'cavalo'];
+
+    let pecasbrancas = [RAINHA_BRANCA.simbolo, TORRE_BRANCA.simbolo, BISPO_BRANCO.simbolo, CAVALO_BRANCO.simbolo, REI_BRANCO.simbolo, PEAO_BRANCO.simbolo];
+
+    let pecaspretas = [RAINHA_PRETA.simbolo, TORRE_PRETA.simbolo, BISPO_PRETO.simbolo, CAVALO_PRETO.simbolo, REI_PRETO.simbolo, PEAO_PRETO.simbolo];
+    
+    let cordopeao = undefined;
+
+    if (pecasbrancas.includes( selecao.innerHTML )){
+        cordopeao = BRANCO;
+    } else if (pecaspretas.includes( selecao.innerHTML )){
+        cordopeao = PRETO;
+    }
+
+    do {
+        userInput = prompt('Para qual peça você deseja promover este peão?');
+    } while ( userInput == null || !pecasvalidas.includes( userInput.toLowerCase() ) );
+    
+
+       
+    return criarUnidade(userInput, cordopeao).simbolo;
 }
 
 window.onload = function () {
