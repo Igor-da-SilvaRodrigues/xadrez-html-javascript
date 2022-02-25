@@ -177,7 +177,7 @@ function criarUnidade(peca, cor){
             }else{
                 icone = 'w';
             }
-            valmov = function(selecao, destino){//kk
+            valmov = function(selecao, destino){
                 return TORRE_BRANCA.validarMovimento(selecao, destino) || BISPO_BRANCO.validarMovimento(selecao, destino);
             }
             break;
@@ -293,14 +293,6 @@ function getTabuleiro(){ // retorna um conjunto de 8 linhas
     return document.getElementsByTagName("tr");
 }
 
-/*//#region codigo aparentemente desnecessário
-function setTabuleiro(tabuleiro){
-
-    aparentemente `document.getElementsByTagName()` retorna os elementos "AO VIVO", o que provavelmente significa que ele retorna um ponteiro.
-    então eu não devo precisar de um metodo `set`
-
-}
-*///#endregion
 
 //prepara um tabuleiro para um novo jogo
 function prepararTabuleiro(tabuleiro){
@@ -463,7 +455,7 @@ window.onload = function () {
                 selecionar(td_linha, td_coluna);  
             });
             console.log(`added event listener to (${td_linha},${td_coluna})`); 
-            //selecionar(tds[i].parentElement.id[1], tds[i].classList[tds[i].classList.length-1]);
+            
         }else{
             console.log(`failed to add event listener to \"${i}\"`);
         }
